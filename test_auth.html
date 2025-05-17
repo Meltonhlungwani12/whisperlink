@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Auth</title>
+</head>
+<body>
+    <h1>Authentication Test</h1>
+    <form id="authForm">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br><br>
+        <button type="submit">Login</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Simulate authentication (replace with real API call)
+            if(username === 'testuser' && password === 'testpass') {
+                document.getElementById('result').textContent = 'Login successful!';
+                document.getElementById('result').style.color = 'green';
+            } else {
+                document.getElementById('result').textContent = 'Invalid credentials.';
+                document.getElementById('result').style.color = 'red';
+            }
+        });
+    </script>
+</body>
+</html>
