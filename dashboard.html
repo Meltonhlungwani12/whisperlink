@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhisperLink - Social Connection Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --background: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    body {
+      background: var(--background);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    .nav-bar {
+      background: white;
+      box-shadow: var(--shadow);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--primary);
+      text-decoration: none;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .copy-link {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .dashboard-container {
+      display: flex;
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .sidebar {
+      width: 280px;
+      position: sticky;
+      top: 80px;
+      height: calc(100vh - 120px);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      padding: 0;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .menu-item {
+      padding: 1.25rem;
+      cursor: pointer;
+      position: relative;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .menu-item:hover {
+      background: #f8fafc;
+      color: var(--primary);
+      border-left-color: var(--primary);
+    }
+
+    .active-menu {
+      background: #f0f4ff;
+      color: var(--primary);
+      font-weight: 600;
+      border-left-color: var(--primary);
+    }
+
+    .notification-dot {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 10px;
+      height: 10px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.95); }
+      50% { transform: scale(1.1); }
+    }
+
+    .content-area {
+      flex: 1;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+    }
+
+    .message-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .message-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .message-time {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .message-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .action-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      filter: brightness(0.9);
+    }
+
+    .reaction-btn {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+
+    .report-btn {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .game-panel {
+      background: var(--gradient);
+      color: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .game-title {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-button {
+      background: white;
+      color: var(--primary);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s ease;
+    }
+
+    .game-button:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .sidebar {
+        width: 100%;
+        position: static;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav-bar">
+    <div class="nav-content">
+      <a href="/" class="brand">WhisperLink</a>
+      <div>
+        <button class="copy-link" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="menu-item active-menu">📨 My Messages <span class="notification-dot"></span></li>
+        <li class="menu-item">❤️ Crush List <span class="notification-dot"></span></li>
+        <li class="menu-item">🎮 Play Games</li>
+        <li class="menu-item">🏆 Achievements</li>
+        <li class="menu-item">⚙️ Settings</li>
+      </ul>
+
+      <div class="game-panel">
+        <h2 class="game-title">Daily Challenge</h2>
+        <p>Send 3 messages to unlock rewards!</p>
+        <button class="game-button" onclick="startDailyChallenge()">
+          Start Challenge
+        </button>
+      </div>
+    </aside>
+
+    <main class="content-area">
+      <div class="connection-status">
+        <i class="fas fa-circle"></i>
+        <span>Real-time Connected</span>
+      </div>
+
+      <div class="messages-list">
+        <div class="message-card">
+          <span class="message-time">2h ago</span>
+          <p>Someone loves your sense of humor! 😂</p>
+          <div class="message-actions">
+            <button class="action-btn reaction-btn">
+              <i class="fas fa-smile"></i> React
+            </button>
+            <button class="action-btn report-btn" onclick="reportMessage('123')">
+              <i class="fas fa-flag"></i> Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="interaction-guide">
+        <h3>How to Play:</h3>
+        <ol>
+          <li>Share your unique link with friends</li>
+          <li>Respond to anonymous messages</li>
+          <li>Collect reaction points</li>
+          <li>Unlock special features</li>
+        </ol>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    // Enhanced Interactive Features
+    let userPoints = 0;
+    let dailyChallengeProgress = 0;
+
+    function startDailyChallenge() {
+      alert('Daily Challenge Started! Send 3 messages to earn rewards!');
+      dailyChallengeProgress = 0;
+      updateChallengeProgress();
+    }
+
+    function updateChallengeProgress() {
+      document.querySelector('.game-panel p').textContent = 
+        `Progress: ${dailyChallengeProgress}/3 messages sent`;
+    }
+
+    function awardPoints(amount) {
+      userPoints += amount;
+      showNotification(`+${amount} Points! Total: ${userPoints}`);
+      animatePoints(amount);
+    }
+
+    function animatePoints(amount) {
+      const pointsElement = document.createElement('div');
+      pointsElement.className = 'points-animation';
+      pointsElement.textContent = `+${amount} Points`;
+      document.body.appendChild(pointsElement);
+      setTimeout(() => pointsElement.remove(), 2000);
+    }
+
+    // Enhanced Message Interactions
+    function handleReaction(messageId, reaction) {
+      const messageCard = document.querySelector(`[data-id="${messageId}"]`);
+      if (messageCard) {
+        const reactionBadge = document.createElement('span');
+        reactionBadge.className = 'reaction-badge';
+        reactionBadge.textContent = reaction;
+        messageCard.appendChild(reactionBadge);
+        awardPoints(10);
+      }
+    }
+
+    // Initialize real-time features
+    function initSocket() {
+      const socket = io('https://your-websocket-server.com', {
+        auth: { token: localStorage.getItem('token') }
+      });
+
+      socket.on('new-message', (message) => {
+        awardPoints(5);
+        // Add message to UI
+      });
+
+      socket.on('new-match', (match) => {
+        awardPoints(20);
+        // Add match to UI
+      });
+    }
+
+    // Initial setup
+    document.addEventListener('DOMContentLoaded', () => {
+      initSocket();
+      setupInteractiveTutorial();
+    });
+
+    function setupInteractiveTutorial() {
+      const tutorialSteps = [
+        { element: '.copy-link', text: 'This is your unique sharing link' },
+        { element: '.game-button', text: 'Start daily challenges here' },
+        { element: '.message-actions', text: 'React to messages to earn points' }
+      ];
+
+      // Implement interactive tour
+    }
+
+    // Rest of the existing functionality...
+  </script>
+</body>
+</html>

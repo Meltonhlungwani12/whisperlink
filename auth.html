@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Secure authentication portal for NGL-style anonymous messaging platform">
+  <title>Secure Auth | Anonymous Messenger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --background: #f8fafc;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --success: #22c55e;
+      --error: #ef4444;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    .auth-container {
+      background: #ffffff;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 440px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      transform: translateY(0);
+      opacity: 1;
+      animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      background: #ffffff;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    button:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .toggle {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .toggle a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .toggle a:hover {
+      color: var(--primary-hover);
+    }
+
+    .message {
+      padding: 0.875rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .message.success {
+      background: #f0fdf4;
+      color: var(--success);
+      border: 1px solid #86efac;
+    }
+
+    .message.error {
+      background: #fef2f2;
+      color: var(--error);
+      border: 1px solid #fca5a5;
+    }
+
+    .loader {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #fff;
+      border-bottom-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .auth-container {
+        padding: 1.5rem;
+      }
+      
+      h2 {
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="brand-header">
+      <!-- Add your logo here -->
+      <svg class="brand-logo" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 4C18.477 4 14 8.477 14 14V34C14 39.523 18.477 44 24 44C29.523 44 34 39.523 34 34V14C34 8.477 29.523 4 24 4Z" fill="#6366f1"/>
+        <path d="M24 12C22.343 12 21 13.343 21 15C21 16.657 22.343 18 24 18C25.657 18 27 16.657 27 15C27 13.343 25.657 12 24 12ZM24 30C22.343 30 21 31.343 21 33C21 34.657 22.343 36 24 36C25.657 36 27 34.657 27 33C27 31.343 25.657 30 24 30Z" fill="#ffffff"/>
+      </svg>
+      <h2>Secure Authentication</h2>
+      <p style="color: var(--text-light); font-size: 0.875rem;">Access your anonymous messaging portal</p>
+    </div>
+
+    <form id="auth-form">
+      <div id="username-group" class="form-group" style="display: none;">
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="name@company.com" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" minlength="8" required>
+      </div>
+
+      <button type="submit" id="submit-button">
+        <span class="button-text">Login</span>
+        <div class="loader"></div>
+      </button>
+
+      <div class="toggle">
+        <span id="toggle-text">Don't have an account?</span>
+        <a id="toggle-link">Register here</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const DOM = {
+      form: document.getElementById('auth-form'),
+      usernameGroup: document.getElementById('username-group'),
+      formTitle: document.querySelector('h2'),
+      toggleText: document.getElementById('toggle-text'),
+      toggleLink: document.getElementById('toggle-link'),
+      submitButton: document.getElementById('submit-button'),
+      buttonText: document.querySelector('.button-text'),
+      loader: document.querySelector('.loader'),
+      email: document.getElementById('email'),
+      password: document.getElementById('password'),
+      username: document.getElementById('username')
+    };
+
+    let isLogin = true;
+
+    // Toggle between login/register
+    DOM.toggleLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      isLogin = !isLogin;
+      
+      DOM.formTitle.textContent = isLogin ? 'Secure Login' : 'Create Account';
+      DOM.usernameGroup.style.display = isLogin ? 'none' : 'block';
+      DOM.submitButton.querySelector('.button-text').textContent = isLogin ? 'Login' : 'Register';
+      DOM.toggleText.textContent = isLogin ? "Don't have an account?" : 'Already have an account?';
+      DOM.toggleLink.textContent = isLogin ? 'Register here' : 'Login here';
+      
+      // Reset form
+      DOM.form.reset();
+      DOM.email.focus();
+    });
+
+    // Form submission
+    DOM.form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = {
+        email: DOM.email.value.trim(),
+        password: DOM.password.value.trim(),
+        username: isLogin ? undefined : DOM.username.value.trim()
+      };
+
+      // Show loading state
+      DOM.loader.style.display = 'block';
+      DOM.buttonText.style.visibility = 'hidden';
+      DOM.submitButton.disabled = true;
+
+      try {
+        const response = await fetch(isLogin ? '/api/auth/login' : '/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage(data.message || 'Authentication successful!', 'success');
+          localStorage.setItem('authToken', data.token);
+          setTimeout(() => window.location.href = '/dashboard', 1500);
+        } else {
+          throw new Error(data.message || 'Authentication failed');
+        }
+      } catch (error) {
+        showMessage(error.message, 'error');
+      } finally {
+        DOM.loader.style.display = 'none';
+        DOM.buttonText.style.visibility = 'visible';
+        DOM.submitButton.disabled = false;
+      }
+    });
+
+    function showMessage(message, type = 'success') {
+      const msgEl = document.createElement('div');
+      msgEl.className = `message ${type}`;
+      msgEl.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          ${type === 'success' ? 
+            '<path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' :
+            '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"/>'}
+        </svg>
+        ${message}
+      `;
+      
+      DOM.form.insertBefore(msgEl, DOM.toggle);
+      setTimeout(() => msgEl.remove(), 5000);
+    }
+
+    // Input validation
+    DOM.form.addEventListener('input', (e) => {
+      const target = e.target;
+      if (target.validity.valid) {
+        target.classList.remove('invalid');
+      } else {
+        target.classList.add('invalid');
+      }
+    });
+  </script>
+</body>
+</html>
